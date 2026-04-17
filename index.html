@@ -30,7 +30,7 @@
 <body>
 	<button id="audioToggle" type="button" aria-label="播放或暂停音乐" aria-pressed="false" title="播放">▶</button>
 	<audio id="bgm" preload="auto" playsinline webkit-playsinline>
-  		<source src="https://wote.cdn.bcebos.com/resources/knowledge/1393aa6c-146c-4868-abca-2c03afe4e9fd/4b032577-eac4-463d-b86f-c25d993d3681/f7d0447e-8330-4ba1-b868-a7ef72ef910c/f7d0447e-8330-4ba1-b868-a7ef72ef910c.mp3" type="audio/mpeg">
+		<source src="https://wote.cdn.bcebos.com/resources/knowledge/1393aa6c-146c-4868-abca-2c03afe4e9fd/4b032577-eac4-463d-b86f-c25d993d3681/f7d0447e-8330-4ba1-b868-a7ef72ef910c/f7d0447e-8330-4ba1-b868-a7ef72ef910c.mp3" type="audio/mpeg">
 	</audio>
 	<div id="mainDiv">
 		<div id="content">
@@ -703,11 +703,38 @@
 		} else {
 			var bgm = document.getElementById('bgm');
 			var audioToggle = document.getElementById('audioToggle');
+			var remoteAudioSrc = 'https://wote.cdn.bcebos.com/resources/knowledge/1393aa6c-146c-4868-abca-2c03afe4e9fd/4b032577-eac4-463d-b86f-c25d993d3681/f7d0447e-8330-4ba1-b868-a7ef72ef910c/f7d0447e-8330-4ba1-b868-a7ef72ef910c.mp3';
+			var localAudioSrc = 'audio/bgm.mp3';
+			var usingLocalFallback = false;
+			bgm.src = remoteAudioSrc;
 
 			function syncAudioButton(isPlaying) {
 				audioToggle.textContent = isPlaying ? '❚❚' : '▶';
 				audioToggle.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
 				audioToggle.setAttribute('title', isPlaying ? '暂停' : '播放');
+			}
+
+			async function playWithFallback() {
+				try {
+					bgm.currentTime = 0;
+					await bgm.play();
+				} catch (e) {
+					if (!usingLocalFallback) {
+						usingLocalFallback = true;
+						bgm.src = localAudioSrc;
+						bgm.load();
+						try {
+							bgm.currentTime = 0;
+							await bgm.play();
+						} catch (err) {
+							console.warn('Background music failed on remote and local', err || e);
+							syncAudioButton(false);
+						}
+					} else {
+						console.warn('Background music failed to play', e);
+						syncAudioButton(false);
+					}
+				}
 			}
 
 			audioToggle.addEventListener('click', async function() {
@@ -716,17 +743,7 @@
 					return;
 				}
 
-				try {
-					await bgm.play();
-				} catch (e) {
-					// 某些移动端首次点击可能需要先load再play
-					bgm.load();
-					try {
-						await bgm.play();
-					} catch (err) {
-						syncAudioButton(false);
-					}
-				}
+				await playWithFallback();
 			});
 
 			bgm.addEventListener('play', function() {
