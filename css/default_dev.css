@@ -159,6 +159,8 @@ audio {
 	background: radial-gradient(circle at 30% 30%, #fffafc 0%, #ffe9ef 75%, #ffdbe5 100%);
 	color: #b83a64;
 	cursor: pointer;
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
 	box-shadow: 0 4px 12px rgba(184, 58, 100, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.85);
 	transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
@@ -188,7 +190,11 @@ audio {
 	}
 
 	#audioToggle {
-		margin: 12px auto 0;
+		position: fixed;
+		top: 10px;
+		right: 12px;
+		z-index: 9999;
+		margin: 0;
 	}
 
 	#content {
