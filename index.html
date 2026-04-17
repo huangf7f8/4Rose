@@ -3,6 +3,7 @@
 <head>
 	<title>Our Story</title>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<style type="text/css">
 		@font-face {
 			font-family: digit;
@@ -10,10 +11,10 @@
 		}
 	</style>
 
-	<link href="css/default.css" type="text/css" rel="stylesheet">
+	<link href="css/default_dev.css" type="text/css" rel="stylesheet">
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/garden.js"></script>
-        <script type="text/javascript" src="js/functions.js"></script>
+	<script type="text/javascript" src="js/functions_dev.js"></script>
 	<script>
 		var _hmt = _hmt || [];
 		(function() {
@@ -27,9 +28,10 @@
 </head>
 
 <body>
-	 <audio controls>
+	<button id="audioToggle" type="button" aria-label="播放或暂停音乐" aria-pressed="false" title="播放">▶</button>
+	<audio id="bgm" preload="auto" playsinline webkit-playsinline>
   		<source src="https://wote.cdn.bcebos.com/resources/knowledge/1393aa6c-146c-4868-abca-2c03afe4e9fd/4b032577-eac4-463d-b86f-c25d993d3681/f7d0447e-8330-4ba1-b868-a7ef72ef910c/f7d0447e-8330-4ba1-b868-a7ef72ef910c.mp3" type="audio/mpeg">
-	    </audio>
+	</audio>
 	<div id="mainDiv">
 		<div id="content">
 			<div id="code">
@@ -699,17 +701,47 @@
 			$("#copyright").css("bottom", "10px");
 		    document.execCommand("stop");
 		} else {
-			setTimeout(function () {
-				startHeartAnimation();
-			}, 5000);
+			var bgm = document.getElementById('bgm');
+			var audioToggle = document.getElementById('audioToggle');
 
-			timeElapse(together);
-			setInterval(function () {
-				timeElapse(together);
-			}, 500);
+			function syncAudioButton(isPlaying) {
+				audioToggle.textContent = isPlaying ? '❚❚' : '▶';
+				audioToggle.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+				audioToggle.setAttribute('title', isPlaying ? '暂停' : '播放');
+			}
 
-			adjustCodePosition();
-			$("#code").typewriter();
+			audioToggle.addEventListener('click', async function() {
+				if (!bgm.paused) {
+					bgm.pause();
+					return;
+				}
+
+				try {
+					await bgm.play();
+				} catch (e) {
+					// 某些移动端首次点击可能需要先load再play
+					bgm.load();
+					try {
+						await bgm.play();
+					} catch (err) {
+						syncAudioButton(false);
+					}
+				}
+			});
+
+			bgm.addEventListener('play', function() {
+				syncAudioButton(true);
+			});
+
+			bgm.addEventListener('pause', function() {
+				syncAudioButton(false);
+			});
+
+			bgm.addEventListener('ended', function() {
+				syncAudioButton(false);
+			});
+
+			syncAudioButton(false);
 		}
 	</script>
 </body>

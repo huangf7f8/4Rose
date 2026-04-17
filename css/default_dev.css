@@ -68,6 +68,13 @@ body {
 	float: left;
 	width: 440px;
 	height: 400px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	line-height: 0.9;
+	overflow: hidden;
 	color: #333;
 	font-family: "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", "sans-serif";
 	font-size: 12px;
@@ -88,6 +95,26 @@ body {
 
 #code .space{
 	margin-left:7px;
+}
+
+#code .typewriter-content {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#code .typewriter-cursor {
+	display: inline-block;
+	width: 1ch;
+	text-align: left;
+	line-height: 1;
+	visibility: visible;
+}
+
+#code .typewriter-cursor.is-hidden {
+	visibility: hidden;
 }
 
 #code .comments{
@@ -112,4 +139,131 @@ body {
 
 #copyright a{
 	color:#666;
+}
+
+audio {
+	display: none;
+}
+
+#audioToggle {
+	display: block;
+	margin: 12px auto 16px;
+	width: 48px;
+	height: 48px;
+	padding: 0;
+	font-size: 19px;
+	line-height: 48px;
+	text-align: center;
+	border: 1px solid #f1c9d2;
+	border-radius: 50%;
+	background: radial-gradient(circle at 30% 30%, #fffafc 0%, #ffe9ef 75%, #ffdbe5 100%);
+	color: #b83a64;
+	cursor: pointer;
+	box-shadow: 0 4px 12px rgba(184, 58, 100, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+	transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+#audioToggle:hover {
+	filter: brightness(1.03);
+	box-shadow: 0 6px 16px rgba(184, 58, 100, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+#audioToggle:active {
+	transform: scale(0.95);
+}
+
+#audioToggle:focus-visible {
+	outline: 2px solid #f5a4b8;
+	outline-offset: 2px;
+}
+
+@media screen and (max-width: 768px) {
+	body {
+		font-size: 14px;
+	}
+
+	#mainDiv {
+		width: 100%;
+		height: auto;
+	}
+
+	#audioToggle {
+		margin: 12px auto 0;
+	}
+
+	#content {
+		width: 100% !important;
+		height: auto !important;
+		margin: 0 !important;
+		display: flex;
+		flex-direction: column;
+	}
+
+	#loveHeart {
+		float: none;
+		order: 1;
+		width: 100% !important;
+		height: 88vh;
+		min-height: 620px;
+		max-height: 780px;
+		margin: -140px 0 -200px;
+		display: block;
+		position: relative;
+	}
+
+	#garden {
+		width: 100%;
+		height: 100%;
+	}
+
+	#code {
+		float: none;
+		order: 2;
+		width: 100% !important;
+		height: auto !important;
+		min-height: 320px;
+		min-width: calc(100% - 24px);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		font-size: 16px;
+		line-height: 0.9;
+		overflow: hidden;
+		margin-top: 0;
+		padding: 0 12px 24px;
+		box-sizing: border-box;
+	}
+
+	#words {
+		position: absolute;
+		top: 49%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 86%;
+		font-size: 18px;
+		text-align: center;
+		margin-top: 0;
+		z-index: 2;
+	}
+
+	#elapseClock {
+		text-align: center;
+		font-size: 16px;
+	}
+
+	#elapseClock .digit {
+		font-size: 28px;
+	}
+
+	#loveu {
+		margin: 12px auto 0;
+		font-size: 18px;
+		text-align: center;
+	}
+
+	#messages {
+		text-align: center;
+	}
 }
